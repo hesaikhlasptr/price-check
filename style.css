@@ -1,0 +1,68 @@
+*,
+html{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+
+.container-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+}
+
+.welcome-container {
+    background-color: white;
+    padding: 50px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.welcome-image {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.heading-title {
+    color: #333;
+    margin-top: -2cm; /* Margin negatif untuk menggeser judul ke atas */
+    margin-bottom: 2cm; /* Menambahkan margin-bottom untuk memberikan ruang antara judul dan gambar */
+}
+
+
+.welcome-button {
+    padding: 20px 60px;
+    font-size: 20px;
+    background-color: #43C4E0;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Menambahkan efek transisi warna */
+    text-decoration: none; /* Menghilangkan underline pada tombol */
+}
+
+.welcome-button:hover {
+    background-color: #226574; /* Warna latar belakang saat tombol dihover */
+}
+
+.navbar .navbar-brand {
+    color: white !important;
+    font-size: 30px;
+}
+
+.welcome-message{
+    font-size: 40px;
+}
+
+.container-footer{
+    height: 10vh;
+    background-color: #43C4E0;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}

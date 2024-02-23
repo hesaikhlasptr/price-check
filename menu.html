@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <title>Price List</title>
+    <style>
+        body {
+            background-color: white;
+            font-family: "Noto Sans", sans-serif;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        nav {
+            background-color: #43C4E0;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        #brand {
+            order: 1;
+            font-size: 25px;
+            color: white;
+            margin-right: 1cm;
+        }
+
+        #searchForm {
+            order: 2;
+            display: flex;
+            align-items: center;
+        }
+
+        #searchInput {
+            width: 1050px;
+            padding: 10px;
+            margin-right: 10px;
+            margin-bottom: 0;
+            background-color: #32A5BE;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 20px;
+            transition: background-color 0.3s, color 0.3s;
+            font-family: "Noto Sans", sans-serif;
+        }
+
+        #searchInput::placeholder {
+            color: #ffff;
+            opacity: 0.8;
+        }
+
+        #searchInput:focus {
+            background-color: white;
+            color: black;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            display: none;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        #emptyMessage {
+            text-align: center;
+            font-size: 30px;
+            font-weight: 600;
+            display: block;
+            margin-top: 200px;
+            text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Add this style for clickable rows */
+        table tbody tr {
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        table tbody tr:hover {
+            background-color: #e6f7ff;
+        }
+
+        footer {
+            background-color: #f1f1f1;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 50px;
+        }
+
+        .back-button {
+            position: absolute;
+            left: 10px;
+            bottom: 10px;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        .back-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 5px;
+            color: rgb(68, 68, 68);
+        }
+
+        /* Table header style */
+        thead {
+            position: sticky;
+            top: 0;
+            background-color: #f1f1f1;
+            color: black;
+            z-index: 999;
+        }
+
+        /* Table container style */
+        #tableContainer {
+            max-height: calc(100vh - 150px);
+            /* Sesuaikan tinggi maksimum tabel di sini */
+            overflow-y: auto;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var table = document.getElementById("priceList");
+            var formProductId = document.getElementById("productId");
+            var formProductName = document.getElementById("productName");
+            var formProductPrice = document.getElementById("productPrice");
+            var formProductStock = document.getElementById("productStock");  // Added line
+            var searchForm = document.getElementById("searchForm");
+            var searchInput = document.getElementById("searchInput");
+
+            // Dummy data for demonstration
+            var prices = [
+                { productId: 1, productName: "The Catcher in the Rye", price: "15.000", stock: 10 },
+                { productId: 2, productName: "To Kill a Mockingbird", price: "25.000", stock: 15 },
+                { productId: 3, productName: "1984", price: "35.000", stock: 20 },
+                { productId: 4, productName: "The Great Gatsby", price: "45.000", stock: 25 },
+                { productId: 5, productName: "One Hundred Years of Solitude", price: "55.000", stock: 30 },
+                { productId: 6, productName: "Brave New World", price: "65.000", stock: 35 },
+                { productId: 7, productName: "The Lord of the Rings", price: "75.000", stock: 40 },
+                { productId: 8, productName: "Pride and Prejudice", price: "85.000", stock: 45 },
+                { productId: 9, productName: "The Chronicles of Narnia", price: "95.000", stock: 50 },
+                { productId: 10, productName: "Harry Potter and the Sorcerer's Stone", price: "105.000", stock: 55 },
+                { productId: 11, productName: "The Hitchhiker's Guide to the Galaxy", price: "115.000", stock: 60 },
+                { productId: 12, productName: "Fahrenheit 451", price: "125.000", stock: 65 },
+                { productId: 13, productName: "The Hobbit", price: "135.000", stock: 70 },
+                { productId: 14, productName: "Moby-Dick", price: "145.000", stock: 75 },
+                { productId: 15, productName: "The War of the Worlds", price: "155.000", stock: 80 },
+                // ... (data lainnya)
+            ];
+
+            // Function to display prices in the table
+            function displayPrices(filteredPrices) {
+                var tbody = table.querySelector("tbody");
+                tbody.innerHTML = '';
+
+                if (filteredPrices.length === 0) {
+                    table.style.display = "none";
+                    emptyMessage.style.display = "block";
+                } else {
+                    table.style.display = "table";
+                    emptyMessage.style.display = "none";
+
+                    filteredPrices.forEach(function (item) {
+                        var row = tbody.insertRow();
+                        var cell1 = row.insertCell(0);
+                        var cell2 = row.insertCell(1);
+                        var cell3 = row.insertCell(2);
+
+                        cell1.textContent = item.productId;
+                        cell2.textContent = item.productName;
+                        cell3.textContent = "Rp." + item.price;
+
+                        // Add click event to each row
+                        row.onclick = function () {
+                            // Redirect to another web page (customize the URL as needed)
+                            window.location.href = "print.html?productId=" + item.productId;
+                        };
+                    });
+                }
+            }
+
+            // Function to search prices
+            function searchPrices() {
+                var searchTerm = searchInput.value.toLowerCase();
+                var filteredPrices = [];
+
+                if (searchTerm === "") {
+                    displayPrices([]);
+                } else {
+                    filteredPrices = prices.filter(function (item) {
+                        return (
+                            item.productId.toString().toLowerCase().includes(searchTerm) ||
+                            item.productName.toLowerCase().includes(searchTerm) ||
+                            item.price.toString().toLowerCase().includes(searchTerm)
+                        );
+                    });
+                    displayPrices(filteredPrices);
+                }
+            }
+
+            // Attach the search function to the input event
+            searchForm.addEventListener("submit", function (event) {
+                event.preventDefault();
+                searchPrices();
+                searchInput.focus();
+            });
+
+            // Populate datalist with product options
+            var datalist = document.getElementById("productsList");
+            prices.forEach(function (item) {
+                var option = document.createElement("option");
+                option.value = item.productName;
+                datalist.appendChild(option);
+            });
+        });
+    </script>
+</head>
+
+<body>
+
+    <!-- Navbar Start -->
+    <nav>
+        <form id="searchForm" role="search">
+            <input id="searchInput" type="search" list="productsList" placeholder="Search">
+            <datalist id="productsList"></datalist>
+        </form>
+        <span id="brand">Price Check</span>
+    </nav>
+    <!-- Navbar End -->
+
+    <!-- Data display area -->
+    <div>
+        <div id="emptyMessage">Scan or search for a product to get started</div>
+        <div id="tableContainer">
+            <table id="priceList">
+                <thead>
+                    <tr>
+                        <th scope="col">Product Id</th>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Price</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <a href="login.html" class="back-button">
+            <svg class="back-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H6M12 5l-7 7 7 7"></path>
+            </svg>
+        </a>
+    </footer>
+
+</body>
+
+</html>

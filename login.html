@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f1f1f1;
+            font-family: "Noto Sans", sans-serif;
+        }
+
+        .welcome-container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 700px;
+            height: 500px;
+            overflow: hidden;
+            border: 5px solid #43C4E0;
+            /* Menambahkan border berwarna */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            /* Menambahkan efek shadow */
+
+        }
+
+        .welcome-image {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .heading-title {
+            color: black;
+            margin-top: -50px;
+            font-size: 40px;
+        }
+
+        .login-form {
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .form-control {
+            width: 300px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .welcome-button {
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #43C4E0;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            width: 90%;
+            max-width: 200px;
+            box-sizing: border-box;
+        }
+
+        .welcome-button,
+        .form-control {
+            font-family: "Noto Sans", sans-serif;
+        }
+
+        .welcome-button:hover {
+            background-color: #2E91A5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="welcome-container">
+        <img src="gramedialogo.png" class="welcome-image" alt="Welcome Image">
+        <h1 class="heading-title">Price Checker</h1>
+
+        <!-- Formulir Login -->
+        <form class="login-form" onsubmit="redirectAfterLogin(event)">
+            <div class="mb-3">
+                <input type="text" class="form-control" placeholder="Username" id="username">
+            </div>
+            <div class="mb-3">
+                <input type="password" class="form-control" placeholder="Password" id="password">
+            </div>
+            <button type="submit" class="welcome-button">Login</button>
+        </form>
+        <!-- End Formulir Login -->
+
+    </div>
+
+    <!-- JavaScript untuk Menangani Login dan Redirect -->
+    <script>
+        var users = [
+            { username: 'admin', password: '123456', role: 'admin' },
+            { username: '10100', password: '10100', role: 'user' },
+            // Tambahkan pengguna lain jika diperlukan
+        ];
+
+        function redirectAfterLogin(event) {
+            event.preventDefault();
+
+            var enteredUsername = document.getElementById('username').value;
+            var enteredPassword = document.getElementById('password').value;
+
+            var user = users.find(function (u) {
+                return u.username === enteredUsername && u.password === enteredPassword;
+            });
+
+            if (user) {
+                // Ganti 'halaman-baru.html' dengan URL halaman baru yang diinginkan
+                window.location.href = 'menu.html';
+            } else {
+                alert('Login failed. Check your username and password.');
+            }
+        }
+    </script>
+    <!-- End JavaScript -->
+
+</body>
+
+</html>

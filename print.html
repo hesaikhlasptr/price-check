@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            background-color: white;
+            font-family: "Noto Sans", sans-serif;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        nav {
+            background-color: #43C4E0;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #brand {
+            order: 1;
+            font-size: 25px;
+            color: white;
+            margin-right: 1cm;
+        }
+
+        #searchForm {
+            order: 2;
+            display: flex;
+            align-items: center;
+            margin-bottom: 0;
+        }
+
+        #searchInput {
+            width: 1050px;
+            padding: 10px;
+            margin-right: 10px;
+            background-color: #32A5BE;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 20px;
+            transition: background-color 0.3s, color 0.3s;
+            font-family: "Noto Sans", sans-serif;
+            margin-bottom: 0 !important;
+        }
+
+        #searchInput::placeholder {
+            color: #ffff;
+            opacity: 0.8;
+        }
+
+        #searchInput:focus {
+            background-color: white;
+            color: black;
+        }
+
+        footer {
+            background-color: #f1f1f1;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 50px;
+        }
+
+        .back-button {
+            position: absolute;
+            left: 10px;
+            bottom: 10px;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        .back-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 5px;
+            color: rgb(68, 68, 68);
+        }
+
+        .content-area {
+            padding: 30px;
+        }
+
+        /* Styling for the form */
+        form {
+            display: flex;
+            flex-direction: column;
+            font-weight: 300;
+        }
+
+        label {
+            margin-bottom: 10px;
+            font-size: 25px;
+        }
+
+        input {
+            padding: 8px;
+            margin-bottom: 15px;
+            font-size: 30px;
+            border: none;
+            border-radius: 5px;
+            background-color: #F1F1F1;
+        }
+
+        #productPrice {
+            font-weight: bold;
+            background-color: #a3ebfb;
+        }
+        
+        #productStock {
+            background-color: transparent; /* Menghilangkan background */
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var searchInput = document.getElementById("searchInput");
+            var formProductId = document.getElementById("productId");
+            var formProductName = document.getElementById("productName");
+            var formProductPrice = document.getElementById("productPrice");
+            var formProductStock = document.getElementById("productStock");
+
+            // Function to get URL parameters
+            function getUrlParameter(name) {
+                name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+                var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+                var results = regex.exec(location.search);
+                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+            }
+
+            // Get productId from URL parameter
+            var productId = getUrlParameter('productId');
+
+            // Dummy data for demonstration
+            var prices = [
+                { productId: 1, productName: "The Catcher in the Rye", price: "15.000", stock: 10 },
+                { productId: 2, productName: "To Kill a Mockingbird", price: "25.000", stock: 15 },
+                { productId: 3, productName: "1984", price: "35.000", stock: 20 },
+                { productId: 4, productName: "The Great Gatsby", price: "45.000", stock: 25 },
+                { productId: 5, productName: "One Hundred Years of Solitude", price: "55.000", stock: 30 },
+                { productId: 6, productName: "Brave New World", price: "65.000", stock: 35 },
+                { productId: 7, productName: "The Lord of the Rings", price: "75.000", stock: 40 },
+                { productId: 8, productName: "Pride and Prejudice", price: "85.000", stock: 45 },
+                { productId: 9, productName: "The Chronicles of Narnia", price: "95.000", stock: 50 },
+                { productId: 10, productName: "Harry Potter and the Sorcerer's Stone", price: "105.000", stock: 55 },
+                { productId: 11, productName: "The Hitchhiker's Guide to the Galaxy", price: "115.000", stock: 60 },
+                { productId: 12, productName: "Fahrenheit 451", price: "125.000", stock: 65 },
+                { productId: 13, productName: "The Hobbit", price: "135.000", stock: 70 },
+                { productId: 14, productName: "Moby-Dick", price: "145.000", stock: 75 },
+                { productId: 15, productName: "The War of the Worlds", price: "155.000", stock: 80 },
+                // ... (data lainnya)
+            ];
+
+            // Find the product in the array
+            var selectedProduct = prices.find(function (item) {
+                return item.productId == productId;
+            });
+
+            // Display product details in the form
+            if (selectedProduct) {
+                formProductId.value = selectedProduct.productId;
+                formProductName.value = selectedProduct.productName;
+                formProductPrice.value = "Rp." + selectedProduct.price;
+                formProductStock.value = selectedProduct.stock;
+            } else {
+                // Handle product not found (redirect or show an error message)
+                console.error("Product not found");
+            }
+        });
+    </script>
+</head>
+
+<body>
+
+    <!-- Navbar Start -->
+    <nav>
+        <span id="brand">Price Check</span>
+        <form id="searchForm" role="search">
+            <input id="searchInput" type="search" placeholder="Search">
+        </form>
+    </nav>
+    <!-- Navbar End -->
+
+    <!-- Content Area -->
+    <div class="content-area">
+        <form>
+            <label for="productId">Product Id:</label>
+            <input type="text" id="productId" name="productId" readonly>
+
+            <label for="productName">Product Name:</label>
+            <input type="text" id="productName" name="productName" readonly>
+
+            <label for="productPrice">Product Price:</label>
+            <input type="text" id="productPrice" name="productPrice" readonly>
+
+            <label for="productStock">Current Store Quantity:</label>
+            <input type="text" id="productStock" name="productStock" readonly class="product-stock">
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <a href="menu.html" class="back-button">
+            <svg class="back-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H6M12 5l-7 7 7 7"></path>
+            </svg>
+        </a>
+    </footer>
+
+</body>
+
+</html>
